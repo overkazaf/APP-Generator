@@ -22,10 +22,6 @@ const isProjectNameValid = (projectName) => {
 	return validateProjectName(projectName).validForNewPackages;
 };
 
-if (isProjectNameValid('aaa')) {
-	chalk.blue('yah');
-}
-
 let projectName;
 
 const program = new commander.Command(packageJson.name)
@@ -36,6 +32,8 @@ const program = new commander.Command(packageJson.name)
 		projectName = name;
 	})
 	.option('--verbose', 'print additional logs')
+	.option('-R, --remove', 'remove specific project')
+	.option('-f, --force', 'force creating project if there exists a same one')
 	.option(
 		'--scripts-version <alternative-package>',
 		'use a non-standard version of react-scripts'
@@ -67,6 +65,19 @@ const program = new commander.Command(packageJson.name)
 		process.exit(1);
 	}
 
+
+	if (program.remove) {
+		removeProject(projectName);
+		process.exit(1);
+	}
+
+
+
+function removeProject(val) {
+	console.log(`removing project ${chalk.red(`${projectName}`)} ...`);
+	execSync(`sudo rm -r ${projectName}`);
+	console.log(`project ${chalk.red(`${projectName}`)} has been removed ${chalk.green('successfully')}`);
+}
 
 
 // const hiddenProgram = new commander.Command()
@@ -123,14 +134,16 @@ function dfsCreate(config, dir) {
 	config.children && config.children.map((childDirConfig) => {
 		let folderName = path.join(dir, childDirConfig.name);
 
-		folderName = folderName.replace(/${.*?}/g, function(matched, id) {
+		folderName = folderName.replace(/\$\{(.*?)\}/g, function(matched, id) {
 			switch(id) {
 				case 'project':
-					return appName;
+					return projectName;
 				default:
 					return matched;
 			}
 		});
+
+		console.log('folderName', folderName);
 
 		try {
 			fs.mkdirSync(folderName);
@@ -142,13 +155,22 @@ function dfsCreate(config, dir) {
 	});
 }
 
+const ReplaceMap = {
+	projectName: projectName
+};
+
 function genFileTemplate(fileName) {
 	let template = findTemplate(fileName);
-	let re = //gi;
-	return template.replace(re, function(matched, ) {
-
+	let re = /{{(.*?)}}/gi;
+	return template.replace(re, function(matched, cmd) {
+		return ReplaceMap[cmd]();
 	});
 }
+
+function findTemplate() {
+	return '';
+}
+
 
 function run(root, appName, version, verbose, originalDirectory, template) {
 	
@@ -156,13 +178,14 @@ function run(root, appName, version, verbose, originalDirectory, template) {
 
 	// install all packages while successfully create the project structure
 	
-	console.log(
-		`${chalk.cyan('Start installing node packages...')}`
-	);
 	console.log();
 	console.log(
-		`${chalk.cyan('You need to wait a minute')}`
+		`${chalk.cyan('Installing node dependency packages...')}`
 	);
+	console.log(
+		`${chalk.cyan('You need to wait a minute...')}`
+	);
+	console.log();
 
 	const useYarn = shouldUseYarn();
 	let installPackagesCMD = 'yarn';

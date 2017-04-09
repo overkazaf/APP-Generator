@@ -4,6 +4,7 @@ let category = {};
 category = {
 	name: './',
 	files: [
+		'gulpfile.js'
 	],
 	children: [
 		{
@@ -36,7 +37,7 @@ category = {
 					name: 'images',
 					children: [
 						{
-							name: 'DemoPageName',
+							name: 'TestPageName',
 							files: [
 								'aaa_bbb_ccc@2x.png',
 								'aaa_bbb_ccc@3x.png'
@@ -81,7 +82,16 @@ category = {
 				},
 				{
 					name: '${project}Pages',
-					children: []
+					children: [
+						{
+							name: 'Test',
+							children: [
+								{
+									name: 'index.html'
+								}
+							]
+						}
+					]
 				},
 
 			]
