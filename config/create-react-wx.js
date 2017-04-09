@@ -15,7 +15,9 @@ const unpack = require('tar-pack').unpack;
 const hyperquest = require('hyperquest');
 
 const packageJson = require('./package/wx.json');
-const projectConfig = require('./category/wx.js');
+const projectInfo = require('./info/wx.js');
+const projectConfig = projectInfo.category;
+const projectMapping = projectInfo.mapping;
 
 
 const isProjectNameValid = (projectName) => {
@@ -72,11 +74,20 @@ const program = new commander.Command(packageJson.name)
 	}
 
 
+	if (program.force) {
+		removeProject(projectName);
+	}
+
 
 function removeProject(val) {
-	console.log(`removing project ${chalk.red(`${projectName}`)} ...`);
-	execSync(`sudo rm -r ${projectName}`);
-	console.log(`project ${chalk.red(`${projectName}`)} has been removed ${chalk.green('successfully')}`);
+	if (fs.existsSync(`${projectName}`)) {
+		console.log(`removing project "${chalk.yellow(`${projectName}`)}", need your ${chalk.red(`sudo`)} autherization...`);
+		execSync(`sudo rm -r ${projectName}`);
+		console.log(`project "${chalk.red(`${projectName}`)}" has been removed ${chalk.green('successfully')}`);
+	} else {
+		console.log(`project "${chalk.red(`${projectName}`)}" not exists, no need to remove`);
+	}
+
 }
 
 
@@ -118,6 +129,18 @@ function createApp(name, verbose, version, template) {
 	process.chdir(root);
 
 	run(root, appName, version, verbose, originalDirectory, 'template');
+
+	createDemoPage(appName, originalDirectory);
+}
+
+function createDemoPage(appName, originalDirectory) {
+	process.chdir(path.join(originalDirectory, appName));
+
+	console.log(` ${chalk.green(`generating demo page "Test"...`)}`);
+	execSync('node genpage Test');
+	console.log(` ${chalk.green(`page "Test" has been successfully generated...`)}`);
+
+	process.chdir(originalDirectory);
 }
 
 
@@ -127,7 +150,7 @@ function dfsCreate(config, dir) {
 		const fileName = path.join(dir, file);
 		fs.writeFileSync(
 			fileName,
-			genFileTemplate(fileName)
+			genFileTemplate(fileName, projectMapping)
 		);
 	});
 
@@ -143,8 +166,6 @@ function dfsCreate(config, dir) {
 			}
 		});
 
-		console.log('folderName', folderName);
-
 		try {
 			fs.mkdirSync(folderName);
 		} catch(e) {
@@ -155,19 +176,91 @@ function dfsCreate(config, dir) {
 	});
 }
 
-const ReplaceMap = {
-	projectName: projectName
+
+
+function getIPAdress(){  
+    var interfaces = require('os').networkInterfaces();  
+    for(var devName in interfaces){  
+          var iface = interfaces[devName];  
+          for(var i=0;i<iface.length;i++){  
+               var alias = iface[i];  
+               if(alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal){  
+                     return alias.address;  
+               }  
+          }  
+    }  
+}  
+
+const FSM = {
+	copy: function(src, target) {
+		console.log(`Copying ${chalk.green(`${src}`)} to ${chalk.green(`${target}`)}...`);
+		execSync(`cp -r ${src} ${target}`);
+	},
+	parse: function(tpl) {
+		return new OverCompiler({
+			tpl: tpl,
+			data: {}
+		}, 'html').parse();
+	}
 };
+
+
+function OverCompiler(option, targetCompileType) {
+	this.option = option;
+	this.mode = targetCompileType;
+}
+
+OverCompiler.prototype.lexer = function () {};
+OverCompiler.prototype.parse = function () {};
 
 function genFileTemplate(fileName) {
 	let template = findTemplate(fileName);
-	let re = /{{(.*?)}}/gi;
+	let re = /\$\{(.*?)\}/g;
+
+	const ReplaceFSM = {
+		project: () => {
+			return projectName;
+		},
+		page: () => {
+			return '${page}';
+		},
+		tpl: () => {
+			return '${tpl}';
+		},
+		content: () => {
+			return '${content}';
+		},
+		localIPAddress: () => {
+			return getIPAdress();
+		}
+	};
+
 	return template.replace(re, function(matched, cmd) {
-		return ReplaceMap[cmd]();
+		return (cmd in ReplaceFSM) ? ReplaceFSM[cmd]() : '';
 	});
 }
 
-function findTemplate() {
+
+
+
+function findTemplate(fileName) {
+
+	let target;
+
+	Object.keys(projectMapping).map((file) => {
+		if (fileName.indexOf(file) >= 0) {
+			target = file;
+			return;
+		}
+	});
+
+	if (target) {
+
+		console.log('fileName mapping found', projectMapping[target]);
+		let readStream = fs.readFileSync(path.join(__dirname, projectMapping[target]));
+		return readStream.toString();
+	}
+
 	return '';
 }
 

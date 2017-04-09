@@ -27,9 +27,9 @@ gulp.task('dev', function() {
         noInfo: false,
         publicPath: filePath.publicPath
     }).listen(defaultSettings.port, function(err) {
-        console.log('listening: http://localhost:' + defaultSettings.port);
+        console.log('listening: http://${localIPAddress}:' + defaultSettings.port);
         console.log('Opening your system browser...');
-        open('http://localhost:' + defaultSettings.port + '/webpack-dev-server/${project}Pages/Test/index.html');
+        open('http://${localIPAddress}:' + defaultSettings.port + '/webpack-dev-server/${project}Pages/Test/index.html');
     })
 });
 
@@ -39,7 +39,7 @@ gulp.task('clean', function(cb) {
 });
 
 gulp.task('copyVerify', ['clean'], function() {
-    return gulp.src('./MP_verify_Un23AF2Qpuo6nJLb.txt')
+    return gulp.src('./MP_verify_hash.txt')
            .pipe(gulp.dest('prebuild/'));
 })
 
@@ -96,8 +96,8 @@ gulp.task('checkPrebuild', ['prebuild', 'copyPrebuildFiles'], function() {
 
     return deferedCheckPrebuild(function() {
         sendEmail({
-            subject: 'siji_app build task has been successfully completed on master branch.',
-            html: '<p>Project will be updated in a minute; Have a nice day! ;D  --sent from John </p>'
+            subject: '${project} build task has been successfully completed on master branch.',
+            html: '<p>Project ${project} will be updated in a minute; Have a nice day! ;D  --sent from John </p>'
         });
     }, function() {
         defered.reject();
@@ -116,7 +116,7 @@ function deferedCheckPrebuild(successFn, errorFn) {
             // copy and del
             copyNewBuiltFiles(function(stdout, stderr) {
                 // 如果不是以war包的形式布在服务器上，这里可以做一个延时任务去剔除旧版本的文件
-                var timeout = 5000;
+                var timeout = 1000;
 
                 console.log('Source codes has been built successfully');
                 console.log('Old files will be deleted in '+ parseInt(timeout/1000, 10) +' seconds...');

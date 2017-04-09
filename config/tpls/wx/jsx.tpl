@@ -7,12 +7,12 @@ import Logger from "extend/common/Logger";
 import 'scss/base.scss';
 import 'scss/{{PageName}}/index.scss';
 
-class MyComponent extends Component {
-	constructor (props) {
+class PageComponent extends Component {
+	constructor(props) {
 		super(props);
 	}
 
-	render () {
+	render() {
 		return (
 			<div className="m-{{pagename}}">
 				<div className="m-header"></div>
@@ -25,9 +25,4 @@ class MyComponent extends Component {
 	}
 }
 
-
-function doRender () {
-	ReactDOM.render(<MyComponent /> , document.getElementById("app"));
-}
-
-setTimeout(doRender, 16);
+ReactDOM.render(<PageComponent /> , document.getElementById("app"));

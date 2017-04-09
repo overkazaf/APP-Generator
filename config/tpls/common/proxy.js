@@ -16,7 +16,7 @@ var app = http.createServer(function(req, res) {
         }
     }
 
-    res.setHeader("Access-Control-Allow-Origin", "*"); // replace * sign of your ip:appPort
+    res.setHeader("Access-Control-Allow-Origin", "http://${localIPAddress}:8090"); // replace * sign of your ip:appPort
     res.setHeader("Access-Control-Allow-Headers", "X-Requested-With,Content-Type");
     res.setHeader("Access-Control-Allow-Credentials", true);
     res.setHeader("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
@@ -66,9 +66,9 @@ var app = http.createServer(function(req, res) {
         sreq.end();
     }
 });
-// 访问127.0.0.1:3001查看效果
+// 访问${localIPAddress}:3001查看效果
 app.listen(3001);
-console.log('server started on 127.0.0.1:3001');
+console.log('server started on ${localIPAddress}:3001');
 
 usage();
 

@@ -1,0 +1,15 @@
+{
+	"current": "dev",
+	"local": "http://${localIPAddress}:3001/",
+	"dev": "http://sjyxtest.yiqiguang.com/jpei/wenwenWeb/",
+	"test": "http://{{Complete the Url}}/",
+	"release": "http://{{Complete the Url}}/",
+	"master": "http://{{Complete the Url}}/",
+	"pageUrl": {
+		"local": "http://${localIPAddress}:3001/${project}Pages/",
+		"dev": "http://sjyxtest.yiqiguang.com/${project}/build/${project}Pages/",
+		"test": "http://{{Complete the Url}}/build/${project}Pages/",
+		"release": "http://{{Complete the Url}}/build/${project}Pages/",
+		"master": "http://{{Complete the Url}}/build/${project}Pages/"
+	}
+}
