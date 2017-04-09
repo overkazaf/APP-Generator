@@ -141,7 +141,7 @@ let mapping = {
 	'config/defaults.js': 'tpls/common/conf/defaults.js',
 	'config/package.js': 'tpls/common/conf/package.js',
 	'config/webpack.config.js': 'tpls/common/conf/webpack.config.js',
-	'config/webpack.config.dist.js': 'tpls/common/conf/webpack.config.dist.js',
+	'config/webpack.dist.config.js': 'tpls/common/conf/webpack.dist.config.js',
 	'.gitignore': 'tpls/common/.gitignore',
 	'.eslintrc': 'tpls/common/.eslintrc',
 	'proxy.js': 'tpls/common/proxy.js',
