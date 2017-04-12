@@ -1,0 +1,7 @@
+module.exports = {
+  "rules": {
+      "semi": ["error", "always"],
+      "quotes": ["error", "double"],
+  },
+  "extends": "eslint:recommended",
+}

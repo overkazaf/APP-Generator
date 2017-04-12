@@ -1,0 +1,15 @@
+{
+	"current": "dev",
+	"local": "http://172.16.24.181:3001/",
+	"dev": "http://sjyxtest.yiqiguang.com/jpei/wenwenWeb/",
+	"test": "http://{{Complete the Url}}/",
+	"release": "http://{{Complete the Url}}/",
+	"master": "http://{{Complete the Url}}/",
+	"pageUrl": {
+		"local": "http://172.16.24.181:3001/aaaPages/",
+		"dev": "http://sjyxtest.yiqiguang.com/aaa/build/aaaPages/",
+		"test": "http://{{Complete the Url}}/build/aaaPages/",
+		"release": "http://{{Complete the Url}}/build/aaaPages/",
+		"master": "http://{{Complete the Url}}/build/aaaPages/"
+	}
+}

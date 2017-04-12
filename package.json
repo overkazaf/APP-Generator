@@ -1,7 +1,36 @@
 {
+  "name": "create-app",
+  "version": "1.0.9",
+  "main": "index.js",
+  "_id": "create-app@1.0.9",
+  "_from": "create-app@",
+  "bin": {
+    "create-react-wx": "./config/create-react-wx.js"
+  },
+  "files": [
+    "index.js",
+    "config",
+    "bin"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "overkazaf",
+  "bugs": {
+    "url": "http://github.com/overkazaf/app-generators/issues",
+    "email": "overkazaf@github.com"
+  },
+  "license": "ISC",
+  "description": "前端项目脚手架生成器",
   "dependencies": {
     "chalk": "^1.1.3",
+    "commander": "^2.9.0",
+    "cross-spawn": "^5.1.0",
+    "fs-extra": "^2.1.2",
+    "hyperquest": "^2.1.2",
     "semver": "^5.3.0",
+    "tar-pack": "^3.4.0",
+    "tmp": "^0.0.31",
     "validate-npm-package-name": "^3.0.0"
   }
 }

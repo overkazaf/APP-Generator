@@ -1,0 +1,407 @@
+$font-size-base: 0.13rem;
+$font-size-sm: 0.12rem;
+$font-size-xs: 0.1rem;
+$font-size-lg: 0.14rem;
+$font-size-xl: 0.16rem;
+
+$font-weight-base: 300;
+
+$color-base: #41444e;
+
+$font-family-sans-serif: "PingFang SC", "Helvetica Neue", Helvetica, "Microsoft YaHei", STHeiTi, Arial, sans-serif;
+
+%input-style {
+  -webkit-appearance: none;
+  appearance: none;
+  vertical-align: middle;
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  border: none;
+  outline: none;
+}
+
+%modal-body {
+  width: 100%;
+  height: 0.75rem;
+  line-height: 0.75rem;
+  text-align: center;
+  font-size: $font-size-xl;
+  color: #41444e;
+}
+
+%modal-body-1 {
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  div:last-child {
+    font-size: $font-size-base;
+    color: #6b6b76;
+  }
+}
+
+%modal-foot {
+  width: 100%;
+  height: 0.45rem;
+  line-height: 0.45rem;
+  text-align: center;
+  color: #2ac1bc;
+  font-size: $font-size-xl;
+  border-top: 1px solid #e2e7ea;
+}
+
+%modal-foot-1 {
+  display: flex;
+}
+
+%angel-left{
+  display: inline-block;
+  font-family: 'FontAwesome';
+  content: '\f104';
+  font-size:0.25rem;
+  color:#41444e;
+}
+
+%one-line-more {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+%two-line-more {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+} 
+
+%displayFlex {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -o-box;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  display: -webkit-flex;
+  -webkit-box-orient: horizontal;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  -o-flex-direction: row;
+  flex-direction: row;
+}
+
+%displayFlexCol {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -o-box;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  display: -webkit-flex;
+  -webkit-box-orient: vertical;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  -o-flex-direction: column;
+  flex-direction: column;
+}
+
+@mixin lineMore($line:1) {
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $line;
+  -webkit-box-orient: vertical;
+}
+
+@mixin opacity($opacity:50) {
+  opacity: $opacity / 100;
+  filter: alpha(opacity=$opacity);
+}
+
+@mixin flexWeight($weight:1) {
+  -moz-box-flex: $weight;
+  -webkit-box-flex: $weight;
+  -o-box-flex: $weight;
+  -ms-flex: $weight;
+  flex: $weight;
+  -webkit-flex: $weight;
+}
+
+@mixin flex($orient,$direction){
+  display: -webkit-box;
+  display: -moz-box;
+  display: -o-box;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  display: -webkit-flex;
+  -webkit-box-orient: $orient;
+  -webkit-flex-direction: $direction;
+  -moz-flex-direction: $direction;
+  -ms-flex-direction: $direction;
+  -o-flex-direction: $direction;
+  flex-direction: $direction;
+}
+
+%flexGrow {
+  -moz-box-flex: 1;
+  -webkit-box-flex: 1;
+  -o-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  -webkit-flex: 1;
+}
+
+%flexGrow2 {
+  -moz-box-flex: 2;
+  -webkit-box-flex: 2;
+  -o-box-flex: 2;
+  -ms-flex: 2;
+  flex: 2;
+  -webkit-flex: 2;
+}
+
+%AlignCenter {
+  align-items: center;
+  -webkit-align-items: center;
+}
+
+//flex布局
+//分三个版本：
+//旧版本:IE和opera都不支持，没有必要写前缀（old）
+//混合版本：一直以来只有IE10才支持(hybird)
+//新版本：iso6下safari浏览器不支持(new)
+//******************************************
+/**
+ * flex盒子
+ */
+%flexDisplay{
+  display:-moz-box;
+  display:-webkit-box;
+  display:box;//old
+  display:-ms-flexbox;
+  display:flexbox; //hybird
+  display:-webkit-flex;
+  display:flex;
+}
+/**
+ * 伸缩流方向
+ * @param: row | row-reverse | column | column-reverse
+ */
+@mixin flexDirectionForOld($direction){
+  @if $direction == row { //old版本还有 inline-axis | block-axis，暂不考虑
+    -webkit-box-orient:horizontal ;
+    -moz-box-orient:horizontal ;
+    box-orient:horizontal;
+  } @else if $direction == column {
+    -webkit-box-orient:vertical ;
+    -moz-box-orient:vertical ;
+    box-orient:vertical;
+  } @else if $direction == row-reverse{
+    -webkit-box-orient:horizontal ;
+    -moz-box-orient:horizontal ;
+    box-orient:horizontal;
+    -webkit-box-direction: reverse;
+    -moz-box-direction: reverse;
+    box-direction: reverse;
+  } @else{
+    -webkit-box-orient:vertical ;
+    -moz-box-orient:vertical ;
+    box-orient:vertical;
+    -webkit-box-direction: reverse;
+    -moz-box-direction: reverse;
+    box-direction: reverse;
+  }
+}
+@mixin flexDirection($direction){
+  @include flexDirectionForOld($direction);
+  -ms-flex-direction:$direction;
+  -webkit-flex-direction:$direction;
+  flex-direction:$direction;
+
+}
+/**
+ * 缩换行
+ * @param: nowrap | wrap | wrap-reverse
+ */
+@mixin flexWrapForOld($param){
+  @if $param == nowrap { //box-lines好像没有浏览器支持
+    -moz-box-lines: single;
+    -webkit-box-lines: single;
+    box-lines: single;
+  } @else if $param == wrap{
+    -moz-box-lines: multiple;
+    -webkit-box-lines: multiple;
+    box-lines: multiple;
+  } @else{
+    //box-lines没有wrap-reverse的对应项
+    //TODO：旧版本可以通过侧轴的end实现，要不要加上，补充在这里呢？？？
+  }
+}
+@mixin flexWrap($param){
+  @include flexWrapForOld($param);
+  -ms-flex-wrap:$param;
+  -webkit-flex-wrap:$param;
+  flex-wrap:$param;
+}
+/**
+ * 伸缩流方向与换行，混合版本新增的，old版本木有
+ * @param:  、
+ */
+@mixin flexFlow($paramA,$paramB){
+  -ms-flex-flow: $paramA,$paramB;
+  flex-flow: $paramA,$paramB;
+  -moz-flex-flow: $paramA,$paramB;
+  //老版本进行组合
+  @include flexDirectionForOld($paramA);
+  @include flexWrapForOld($paramB);
+}
+
+/**
+ * 主轴对齐
+ * @param flex-start | flex-end | center | space-between | space-around
+ */
+@mixin flexJustifyContentForOldAndHybird($param){
+  @if $param == flex-start {
+    -webkit-box-pack: start;
+    -moz-box-pack: start;
+    box-pack: start; // old
+    -ms-flex-pack:start;
+    flex-pack:start; //hybird
+  } @else if $param == flex-end{
+    -webkit-box-pack: end;
+    -moz-box-pack: end;
+    box-pack: end;
+    -ms-flex-pack:end;
+    flex-pack:end;
+  }@else if $param == center{
+    -webkit-box-pack: center;
+    -moz-box-pack: center;
+    box-pack: center;
+    -ms-flex-pack:center;
+    flex-pack: center;
+  }@else{ //老版本没有space-around效果，混合版本没有space-between效果，相互替代
+    -webkit-box-pack: justify;
+    -moz-box-pack: justify;
+    box-pack: justify;
+    -ms-flex-pack:distribute;
+    flex-pack: distribute;
+  }
+}
+@mixin flexJustifyContent($param){
+  @include flexJustifyContentForOldAndHybird($param);
+  -webkit-justify-content: $param;
+  justify-content: $param;
+}
+
+/**
+ * 侧轴对齐
+ * @param flex-start | flex-end | center | baseline | stretch
+ */
+@mixin flexAlignItemsForOldAndHybird($param){
+  @if $param == flex-start {
+    -webkit-box-align: start;
+    -moz-box-align: start;
+    box-align: start; // old
+    -ms-flex-pack:start;
+    flex-pack:start; //hybird
+  } @else if $param == flex-end{
+    -webkit-box-align: end;
+    -moz-box-align: end;
+    box-align: end;
+    -ms-flex-align:end;
+    flex-align:end;
+  }@else{//当box-orient值为vertical，ox-align取baseline时，webkit内核以center方式显示，firefox却以start方式显示
+    -webkit-box-align: $param;
+    -moz-box-align: $param;
+    box-align: $param;
+    -ms-flex-align:$param;
+    flex-align: $param;
+  }
+}
+@mixin  flexAlignItems($param){
+  @include flexAlignItemsForOldAndHybird($param);
+  -webkit-webkit-align-items: $param;
+  align-items: $param;
+}
+
+/**
+ * 堆栈伸缩行 old版本没有该属性，前提：flex-wrap:wrap;
+ * @param flex-start | flex-end | center | space-between | space-around | stretch
+ */
+@mixin flexAlignContenForHybird($param){
+  @if $param == flex-start{
+    -ms-flex-line-pack:start;
+    flex-line-pack:start;
+  } @else if $param == flex-end{
+    -ms-flex-line-pack:end;
+    flex-line-pack:end;
+  }@else if $param == center {
+    -ms-flex-line-pack: center;
+    flex-line-pack: center;
+  }@else if $param == space-between {
+    -ms-flex-line-pack:justify;
+    flex-line-pack: justify;
+  }@else if $param == space-around {
+    -ms-flex-line-pack:distribute;
+    flex-line-pack: distribute;
+  }@else{
+    -ms-flex-line-pack:$param;
+    flex-line-pack: $param;
+  }
+}
+@mixin flexAlignConten($param){
+  @include flexAlignItemsForOldAndHybird($param);
+  -webkit-webkit-align-content: $param;
+  align-content: $param;
+}
+/**
+ * 伸缩性 强制三个参数，或者1个参数，不允许两个参数 不推荐这种方式
+ * @param  ,,
+ */
+@mixin flex($grow,$shrink:1,$basis:auto){
+  -webkit-box-flex: $grow;
+  -moz-box-flex: $grow;
+  box-flex: $grow; //old 注意点：如果定宽的盒子声明某个方向的margin为auto,那么它会占据100%的空间，坑。
+  @if($grow == none){
+    -ms-flex:none;//hybird,压缩属性不能为负值
+    -webkit-flex:none;
+    flex:none;
+  }@else{
+    -ms-flex:$grow $shrink $basis;
+    -webkit-flex:$grow $shrink $basis;
+    flex:$grow $shrink $basis;
+  }
+}
+@mixin flexGrow($grow){
+  -webkit-box-flex: $grow;
+  -moz-box-flex: $grow;
+  box-flex: $grow; //old 注意margin
+  -ms-flex:$grow; //为了兼容，old和hybird不支持分写
+  -webkit-webkit-flex-grow: $grow;
+  flex-grow: $grow;
+}
+@mixin flexShrink($shrink){ //只有最新版才有此属性
+  -webkit-webkit-flex-grow: $shrink;
+  flex-grow: $shrink;
+}
+
+/**
+ * 显示顺序
+ * @param*/
+@mixin Order($num){//默认值1
+  -webkit-box-ordinal-group: $num;
+  -moz-box-ordinal-group: $num;
+  box-ordinal-group: $num; //old
+  -ms-flex-order:$num;
+  flex-order:$num;// hybird
+  -webkit-order:$num;
+  order:$num;
+}

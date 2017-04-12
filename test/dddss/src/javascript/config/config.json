@@ -1,0 +1,15 @@
+{
+	"current": "dev",
+	"local": "http://172.16.24.181:3001/",
+	"dev": "http://sjyxtest.yiqiguang.com/jpei/wenwenWeb/",
+	"test": "http://{{Complete the Url}}/",
+	"release": "http://{{Complete the Url}}/",
+	"master": "http://{{Complete the Url}}/",
+	"pageUrl": {
+		"local": "http://172.16.24.181:3001/dddssPages/",
+		"dev": "http://sjyxtest.yiqiguang.com/dddss/build/dddssPages/",
+		"test": "http://{{Complete the Url}}/build/dddssPages/",
+		"release": "http://{{Complete the Url}}/build/dddssPages/",
+		"master": "http://{{Complete the Url}}/build/dddssPages/"
+	}
+}
