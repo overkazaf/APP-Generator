@@ -163,13 +163,18 @@ function writeEntry() {
 			return;
 		}
 
-		let newDate = strDate.replace('pages = [{',
-`pages = [{
+		let re = /var pages\s*=\s*\[([^;]+)\];/gm;
+
+		let newDate = strDate.replace(re, function(matched, content) {
+			let comma = content.replace(/[ \s\t\r\n]/gm, '').length ? ',': '';
+				return `var pages = [
+{
     name: '${page}/index',
     entry: '${page}/index.jsx',
     ftl: '${project}Pages/${page}/index.html'
-},{`
-		);
+}${comma}
+${content}];`;
+		});
 		fs.writeFileSync(paths.entry, newDate);
 	})
 }

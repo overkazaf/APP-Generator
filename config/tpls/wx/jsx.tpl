@@ -1,9 +1,5 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import Util from "extend/common/util";
-import RequestUtil from "extend/common/RequestUtil";
-import WeixinUtil from "extend/common/WeixinUtil";
-import Logger from "extend/common/Logger";
 import 'scss/base.scss';
 import 'scss/{{PageName}}/index.scss';
 

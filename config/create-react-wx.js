@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 'use strict';
 
 const validateProjectName = require('validate-npm-package-name');
@@ -15,7 +17,7 @@ const unpack = require('tar-pack').unpack;
 const hyperquest = require('hyperquest');
 
 const packageJson = require('./package/wx.json');
-const projectInfo = require('./info/react-app.js');
+const projectInfo = require('./info/wx.js');
 const projectConfig = projectInfo.category;
 const projectMapping = projectInfo.mapping;
 
@@ -51,13 +53,6 @@ const program = new commander.Command(packageJson.name)
 	})
 	.parse(process.argv);
 
-	if (projectName == '\/') {
-		console.log(
-			`Warning: root "${chalk.red(`${program.name()}`)}" cannot be created.`
-		);
-		process.exit(1);
-	}
-
 	if (typeof projectName === 'undefined') {
 		console.error('Please specify the project directory:');
 		console.log(
@@ -71,6 +66,14 @@ const program = new commander.Command(packageJson.name)
 			`Run ${chalk.cyan(`${program.name()} --help`)} to see all options.`
 		);
 
+		process.exit(1);
+	}
+
+
+	if (projectName == '\/') {
+		console.log(
+			`Warning: root "${chalk.red(`${program.name()}`)}" cannot be created.`
+		);
 		process.exit(1);
 	}
 
@@ -162,15 +165,17 @@ function createDemoPage(appName, originalDirectory) {
 
 function dfsCreate(config, dir) {
 
-	config.files && config.files.map((file) => {
+	!!config.files && config.files.map((file) => {
 		const fileName = path.join(dir, file);
+
+		console.log('writting file', fileName);
 		fs.writeFileSync(
 			fileName,
 			genFileTemplate(fileName, projectMapping)
 		);
 	});
 
-	config.children && config.children.map((childDirConfig) => {
+	!!config.children && config.children.map((childDirConfig) => {
 		let folderName = path.join(dir, childDirConfig.name);
 
 		folderName = folderName.replace(/\$\{(.*?)\}/g, function(matched, id) {
@@ -210,7 +215,7 @@ function getIPAdress(){
 const FSM = {
 	copy: function(src, target) {
 		console.log(`Copying ${chalk.green(`${src}`)} to ${chalk.green(`${target}`)}...`);
-		execSync(`cp -r ${src} ${target}`);
+		execSync(`sudo cp -r ${src} ${target}`);
 	},
 	parse: function(tpl) {
 		return new OverCompiler({
@@ -243,6 +248,9 @@ function genFileTemplate(fileName) {
 		tpl: () => {
 			return '${tpl}';
 		},
+		comma: () => {
+			return '${comma}';
+		},
 		content: () => {
 			return '${content}';
 		},
@@ -264,15 +272,16 @@ function findTemplate(fileName) {
 	let target;
 
 	Object.keys(projectMapping).map((file) => {
-		if (fileName.indexOf(file) >= 0) {
+		// we need to deal with this path seperator
+		let fixedFile = file.replace(/\|/g, path.sep);
+		if (fileName.indexOf(fixedFile) >= 0) {
 			target = file;
 			return;
 		}
 	});
 
 	if (target) {
-		//console.log('fileName mapping found', projectMapping[target]);
-		let readStream = fs.readFileSync(path.join(__dirname, projectMapping[target]));
+		let readStream = fs.readFileSync(path.join(__dirname, projectMapping[target].replace(/\|/g, path.sep)));
 		return readStream.toString();
 	}
 

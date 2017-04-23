@@ -9,11 +9,7 @@ var filePath = {
     publicPath: '/'
 };
 
-var pages = [{
-    name: 'Dummy/index',
-    entry: 'Dummy/index.jsx',
-    ftl: '${project}Pages/Dummy/index.html'
-}
+var pages = [
 ];
 
 var pagesToPath = function() {
